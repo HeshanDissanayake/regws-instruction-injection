@@ -1,0 +1,79 @@
+Processing code block:
+.LBB1_123:                              #   in Loop: Header=BB1_16 Depth=1
+sub	a5, a2, a4 Instruction: sub, Operands: ['a5', 'a2', 'a4']
+blt	n9, a5, .LBB1_129 Instruction: blt, Operands: ['n9', 'a5', '.LBB1_129']
+
+End of code block.
+
+Processing code block:
+.LBB1_124:                              #   in Loop: Header=BB1_16 Depth=1
+slt	a3, n10, a2 Instruction: slt, Operands: ['a3', 'n10', 'a2']
+and	a3, a6, a3 Instruction: and, Operands: ['a3', 'a6', 'a3']
+beqz	a3, .LBB1_107 Instruction: beqz, Operands: ['a3', '.LBB1_107']
+j	.LBB1_129 Instruction: j, Operands: ['.LBB1_129']
+
+End of code block.
+
+Processing code block:
+.LBB1_125:                              #   in Loop: Header=BB1_16 Depth=1
+snez	a1, a1 Instruction: snez, Operands: ['a1', 'a1']
+or	a1, a1, n20 Instruction: or, Operands: ['a1', 'a1', 'n20']
+beqz	a1, .LBB1_117 Instruction: beqz, Operands: ['a1', '.LBB1_117']
+
+End of code block.
+
+Processing code block:
+# %bb.126:                              #   in Loop: Header=BB1_16 Depth=1
+flt.s	a1, ft0, fa0 Instruction: flt.s, Operands: ['a1', 'ft0', 'fa0']
+bnez	a1, .LBB1_128 Instruction: bnez, Operands: ['a1', '.LBB1_128']
+
+End of code block.
+
+Processing code block:
+# %bb.127:                              #   in Loop: Header=BB1_16 Depth=1
+fmv.s	ft0, fa0 Instruction: fmv.s, Operands: ['ft0', 'fa0']
+
+End of code block.
+
+Processing code block:
+.LBB1_128:                              #   in Loop: Header=BB1_16 Depth=1
+fcvt.w.s	a1, ft0, rtz Instruction: fcvt.w.s, Operands: ['a1', 'ft0', 'rtz']
+sub	a4, a4, a1 Instruction: sub, Operands: ['a4', 'a4', 'a1']
+bne	a4, t5, .LBB1_121 Instruction: bne, Operands: ['a4', 't5', '.LBB1_121']
+
+End of code block.
+
+Processing code block:
+# %bb.2:
+lw	a3, 4(a0) Instruction: lw, Operands: ['a3, 4', 'a0']
+lw	a2, 0(a0) Instruction: lw, Operands: ['a2, 0', 'a0']
+
+End of code block.
+
+Processing code block:
+.LBB1_129:                              #   in Loop: Header=BB1_16 Depth=1
+add	a1, n12, n26 Instruction: add, Operands: ['a1', 'n12', 'n26']
+sw	t2, 0(a1) Instruction: sw, Operands: ['t2, 0', 'a1']
+slli	a1, t0, 3 Instruction: slli, Operands: ['a1', 't0', '3']
+add	a1, a1, n11 Instruction: add, Operands: ['a1', 'a1', 'n11']
+sw	n19, 4(a1) Instruction: sw, Operands: ['n19, 4', 'a1']
+sw	n18, 0(a1) Instruction: sw, Operands: ['n18, 0', 'a1']
+bltz	n19, .LBB1_131 Instruction: bltz, Operands: ['n19', '.LBB1_131']
+
+End of code block.
+
+Processing code block:
+.LBB1_130:                              #   in Loop: Header=BB1_16 Depth=1
+slli	n18, n18, 2 Instruction: slli, Operands: ['n18', 'n18', '2']
+add	n18, n18, n2 Instruction: add, Operands: ['n18', 'n18', 'n2']
+lw	a1, 0(n18) Instruction: lw, Operands: ['a1, 0', 'n18']
+blt	t2, a1, .LBB1_132 Instruction: blt, Operands: ['t2', 'a1', '.LBB1_132']
+
+End of code block.
+
+Processing code block:
+.LBB1_131:                              #   in Loop: Header=BB1_16 Depth=1
+mv	a1, t2 Instruction: mv, Operands: ['a1', 't2']
+
+End of code block.
+
