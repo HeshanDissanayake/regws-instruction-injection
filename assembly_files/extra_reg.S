@@ -132,7 +132,7 @@ mg_chain_backtrack:                     # @mg_chain_backtrack
 	bnez	a4, .LBB0_15
 .LBB0_19:
 	slli	n8, n8, 2
-	mv	a0, n2
+	mv  a0, n2
 	li	a1, 0
 	mv	a2, n8
 	call	memset
