@@ -1,0 +1,5 @@
+clang --sysroot=/opt/dev/riscv/sysroot/usr/ --gcc-toolchain=/opt/dev/riscv -O3 -S -emit-llvm --target=riscv64 -march=rv64gc c_codes/main.c -o llvm/main.ll
+/home/heshds/llvm-project/output_modified_llvm/bin/llc -O3 --march=riscv64 -mcpu=generic-rv64 -mattr=+d main.ll -o main.S
+/opt/dev/riscv/bin/riscv64-unknown-linux-gnu-gcc -static main_modified.S -o main_modified
+/opt/dev/riscv/bin/riscv64-unknown-linux-gnu-objdump -d main.o
+ /home/heshds/working_dir/riscv-isa-sim/build/spike /home/heshds/riscv-pk_64/build/pk excecutable/main.o 
