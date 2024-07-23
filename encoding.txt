@@ -1,5 +1,5 @@
 {
-    "lui": [["rd", "imm"]],
+    "lui": [["rd", "imm"], ["rd", "off", "imm"]],
     "auipc": [["rd", "imm"]],
     "jal": [["rd", "imm"]],
     "jalr": [[]],
@@ -21,7 +21,7 @@
     "sh": [["rs1", "rs2", "imm"]],
     "sw": [["rs1", "imm", "rs2"]],
     
-    "addi": [["rd", "rs1", "imm"]],
+    "addi": [["rd", "rs1", "imm"], ["rd", "rs1", "off", "imm"]],
     "slti": [["rd", "rs1", "imm"]],
     "sltiu": [["rd", "rs1", "imm"]],
     "xori": [["rd", "rs1", "imm"]],
@@ -57,7 +57,7 @@
     "ld": [["rd", "rs1", "imm"]],
     "sd": [["rs1", "rs2", "imm"]],
     
-    "addiw": [["rd", "imm"]],
+    "addiw": [["rd", "imm"], ["rd", "rd", "imm"]],
     "slliw": [[]],
     "srliw": [[]],
     "sraiw": [[]],

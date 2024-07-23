@@ -9,7 +9,6 @@ def load_instruction_patterns(filename):
 def gen_regsw(matched_operands):
     
     regsw = {'rs1':0, 'rs2':0, 'rd':0}
-    print(matched_operands)
     for operand in regsw.keys():
         if operand in matched_operands.keys():
             matched_operand = matched_operands[operand]
@@ -19,6 +18,15 @@ def gen_regsw(matched_operands):
     
     return f"\tregsw  x{regsw['rd']}, x{regsw['rs1']}, x{regsw['rs2']}"
 
+def translate_registers(line, operands_list):
+    pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
+    new_line = line
+    for op in operands_list:
+        if bool(pattern.search(op)): 
+            translated_reg = 'x%d'%(int(op.replace('n', ''))%32)
+            new_line = new_line.replace(op,translated_reg) 
+
+    return new_line
 
 def process_instruction(line, instruction_patterns):
     parts = line.split(maxsplit=1)
@@ -26,9 +34,12 @@ def process_instruction(line, instruction_patterns):
         instruction_name = parts[0]
         operands = parts[1]
         operands_list = parse_operands(operands)
+        translated_line = translate_registers(line, operands_list)
         matched_operands = match_operands(instruction_name, operands_list, instruction_patterns)
+
         new_inst = gen_regsw(matched_operands)
-        return new_inst
+
+        return new_inst + "\n" + translated_line
         
         # print(f"{line} Instruction: {instruction_name}, Operands: {matched_operands}")
     else:
@@ -53,24 +64,23 @@ def match_operands(instruction_name, operands_list, instruction_patterns):
         for pattern in patterns:
             if len(pattern) == len(operands_list):
                 return {pattern[i]: operands_list[i] for i in range(len(pattern))}
-    return "No encoding found"
+    return "ERROR: No encoding found : " + instruction_name 
 
 def process_code_block(block, instruction_patterns, output_file):
     
     processed_block = ""
-    gen_inst = ""
+    # gen_inst = ""
     pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
 
     for line in block:
         
         if bool(pattern.search(line)):
-            print(line)
             new_inst = process_instruction(line, instruction_patterns)
             if new_inst != gen_inst:
                 processed_block = processed_block + new_inst + '\n'
-            gen_inst = new_inst
+            # gen_inst = new_inst
             
-            processed_block = processed_block + line + '\n'
+            processed_block = processed_block + '\n'
         else:
             gen_inst = ""
             processed_block = processed_block + line + '\n'

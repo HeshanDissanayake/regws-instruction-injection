@@ -17,7 +17,7 @@ main:                                   # @main
 	li	a0, 0
 	ld	ra, 8(sp)                       # 8-byte Folded Reload
 	addi	sp, sp, 16
-	regsw x1,x0,x0
+
 	ret
 .Lfunc_end0:
 	.size	main, .Lfunc_end0-main
