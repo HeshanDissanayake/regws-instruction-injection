@@ -24,7 +24,7 @@ def find_unique_instruction_names(file_path):
     return unique_instructions
 
 # File path to the assembly code text file
-file_path = 'extra_reg.S'
+file_path = 'assembly_files/q_sort_exR.S'
 
 # Get the unique matching instruction names
 unique_instruction_names = find_unique_instruction_names(file_path)

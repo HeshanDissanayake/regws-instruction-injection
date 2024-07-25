@@ -7,7 +7,6 @@ def load_instruction_patterns(filename):
         return json.load(file)
 
 def gen_regsw(matched_operands):
-    
     regsw = {'rs1':0, 'rs2':0, 'rd':0}
     for operand in regsw.keys():
         if operand in matched_operands.keys():
@@ -31,12 +30,12 @@ def translate_registers(line, operands_list):
 def process_instruction(line, instruction_patterns):
     parts = line.split(maxsplit=1)
     if len(parts) > 1:
+        print(line)
         instruction_name = parts[0]
         operands = parts[1]
         operands_list = parse_operands(operands)
         translated_line = translate_registers(line, operands_list)
         matched_operands = match_operands(instruction_name, operands_list, instruction_patterns)
-
         new_inst = gen_regsw(matched_operands)
 
         return new_inst + "\n" + translated_line
@@ -64,7 +63,9 @@ def match_operands(instruction_name, operands_list, instruction_patterns):
         for pattern in patterns:
             if len(pattern) == len(operands_list):
                 return {pattern[i]: operands_list[i] for i in range(len(pattern))}
-    return "ERROR: No encoding found : " + instruction_name 
+    err ="ERROR: No encoding found : " + instruction_name
+    print(err)
+    return err 
 
 def process_code_block(block, instruction_patterns, output_file):
     

@@ -49,6 +49,7 @@ int main() {
     };
     int n = sizeof(arr) / sizeof(arr[0]);
 
+
     printf("Unsorted array:\n");
     printArray(arr, n);
 

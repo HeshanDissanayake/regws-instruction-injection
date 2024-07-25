@@ -121,7 +121,7 @@ quickSort:                              # @quickSort
 	mv	a2, x3
 
 	call	quickSort
-	regsw  x1, x0, x0
+	regsw  x0, x1, x0
 	addiw	a1, x3, 2
 
 	regsw  x0, x0, x1
@@ -132,7 +132,7 @@ quickSort:                              # @quickSort
 	regsw  x0, x1, x0
 	lw	a0, 0(x4)
 
-	regsw  x0, x0, x0
+	regsw  x1, x0, x0
 	addiw	x3, a1, -1
 
 	slli	a2, a1, 2
@@ -150,7 +150,7 @@ quickSort:                              # @quickSort
 	lw	a3, 0(a2)
 	bge	a3, a0, .LBB2_4
 # %bb.6:                                #   in Loop: Header=BB2_5 Depth=2
-	regsw  x1, x0, x0
+	regsw  x1, x1, x0
 	addiw	x3, x3, 1
 
 	regsw  x0, x1, x0
@@ -258,7 +258,6 @@ printArray:                             # @printArray
 	.type	main,@function
 main:                                   # @main
 # %bb.0:
-	addi  t5, t5, 0x555
 	addi	sp, sp, -288
 	sd	ra, 280(sp)                     # 8-byte Folded Spill
 	regsw  x0, x1, x0
