@@ -11,15 +11,18 @@
     "bltu": [["rs1", "rs2", "imm"]],
     "bgeu": [["rs1", "rs2", "imm"]],
 
-    "lb": [["rd", "rs1", "imm"]],
-    "lh": [["rd", "rs1", "imm"]],
-    "lw": [["rd", "imm", "rs1"]],
-    "lbu": [["rd", "rs1", "imm"]],
-    "lhu": [["rd", "rs1", "imm"]],
+    "lb":  [["rd", "imm", "rs1"]],
+    "lh":  [["rd", "imm", "rs1"]],
+    "lw":  [["rd", "imm", "rs1"]],
+    "lbu": [["rd", "imm", "rs1"]],
+    "lhu": [["rd", "imm", "rs1"]],
+    "lwu": [["rd", "imm", "rs1"]],
+    "ld":  [["rd", "imm", "rs1"]],
 
-    "sb": [["rs1", "rs2", "imm"]],
-    "sh": [["rs1", "rs2", "imm"]],
-    "sw": [["rs1", "imm", "rs2"]],
+    "sb": [["rs2", "imm", "rs1"]],
+    "sh": [["rs2", "imm", "rs1"]],
+    "sw": [["rs2", "imm", "rs1"]],
+    "sd": [["rs2", "imm", "rs1"]],
     
     "addi": [["rd", "rs1", "imm"], ["rd", "rs1", "off", "imm"]],
     "slti": [["rd", "rs1", "imm"]],
@@ -30,6 +33,7 @@
     "slli": [["rd", "rs1", "imm"]],
     "srli": [["rd", "rs1", "imm"]],
     "srai": [["rd", "rs1", "imm"]],
+
 
     "add": [["rd", "rs1", "rs2"]],
     "sub": [["rd", "rs1", "rs2"]],
@@ -53,19 +57,18 @@
     "csrrsi": [[]],
     "csrrci": [[]],
 
-    "lwu": [["rd", "rs1", "imm"]],
-    "ld": [["rd", "imm", "rs1"]],
-    "sd": [["rs1", "imm", "rs2"]],
+    
+    
     
     "addiw": [["rd", "imm"], ["rd", "rs1", "imm"]],
-    "slliw": [[]],
-    "srliw": [[]],
-    "sraiw": [[]],
+    "slliw": [["rd", "rs1", "rs2"]],
+    "srliw": [["rd", "rs1", "rs2"]],
+    "sraiw": [["rd", "rs1", "rs2"]],
     "addw": [["rd", "rs1", "rs2"]],
     "subw": [["rd", "rs1", "rs2"]],
-    "sllw": [[]],
-    "srlw": [[]],
-    "sraw": [[]],
+    "sllw": [["rd", "rs1", "rs2"]],
+    "srlw": [["rd", "rs1", "rs2"]],
+    "sraw": [["rd", "rs1", "rs2"]],
     
     "mul": [["rd", "rs1", "rs2"]],
     "mulh": [["rd", "rs1", "rs2"]],
@@ -101,24 +104,61 @@
     "negw": [["rd", "rs1"]],
     "sext.w": [["rd", "rs1"]],
     "seqz": [["rd", "rs1"]],
-    "snez": [["rd", "rs1"]],
+    "snez": [["rd", "rs2"]],
     "sltz": [["rd", "rs1"]],
-    "sgtz": [["rd", "rs1"]],
+    "sgtz": [["rd", "rs2"]],
+    
+    "flt.s": [["rd", "frs1", "frs2"]],
     "fmv.s": [[]],
     "fabs.s": [[]],
     "fneg.s": [[]],
     "fmv.d": [[]],
     "fabs.d": [[]],
     "fneg.d": [[]],
+
+    "fcvt.h.wu": [["rd","rs1"]],
+    "fcvt.s.wu": [["rd","rs1"]],
+    "fcvt.d.wu": [["rd","rs1"]],
+    "fcvt.q.wu": [["rd","rs1"]],
+
+    "fcvt.h.w": [["rd","rs1"]],
     "fcvt.s.w": [["rd","rs1"]],
+    "fcvt.d.w": [["rd","rs1"]],
+    "fcvt.q.w": [["rd","rs1"]],
+
+    "fcvt.wu.h": [["rd","rs1"]],
+    "fcvt.wu.s": [["rd","rs1"]],
+    "fcvt.wu.d": [["rd","rs1"]],
+    "fcvt.wu.q": [["rd","rs1"]],
+
+    "fcvt.w.h": [["rd","rs1"]],
+    "fcvt.w.s": [["rd","rs1"], ["rd","rs1", "round"]],
+    "fcvt.w.d": [["rd","rs1"]],
+    "fcvt.w.q": [["rd","rs1"]],
+    
+
+    "fmv.h.x" : [["rd","rs1"]],
+    "fmv.s.x" : [["rd","rs1"]],
+    "fmv.x.h" : [["rd","rs1"]],
+    "fmv.x.s" : [["rd","rs1"]],
+    
+    "fmv.d.x" : [["rd","rs1"]],
+    "fmv.q.x" : [["rd","rs1"]],
+    "fmv.x.d" : [["rd","rs1"]],
+    "fmv.x.q" : [["rd","rs1"]],
+    
+
     "fmv.x.w" : [["rd","rs1"]],
+    "fmv.w.x" : [["rd","rs1"]],
+
+    
 
     "beqz": [["rs1", "imm"]],
     "bnez": [["rs1", "imm"]],
-    "blez": [["rs1", "imm"]],
+    "blez": [["rs2", "imm"]],
     "bgez": [["rs1", "imm"]],
     "bltz": [["rs1", "imm"]],
-    "bgtz": [["rs1", "imm"]],
+    "bgtz": [["rs2", "imm"]],
     "bgt": [],
     "ble": [],
     "bgtu": [[]],
@@ -126,4 +166,5 @@
     "j": [[]],
     "jr": [[]],
     "ret": [[]]
+
 }

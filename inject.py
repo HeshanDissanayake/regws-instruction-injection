@@ -12,7 +12,7 @@ def gen_regsw(matched_operands):
         if operand in matched_operands.keys():
             matched_operand = matched_operands[operand]
             if 'n' in matched_operand:
-                reg_bank = int(matched_operand.replace('n', ''))//32 + 1
+                reg_bank = int(matched_operand.replace('n', ''))//32 + 1 
                 regsw[operand] = reg_bank
     
     return f"\tregsw  x{regsw['rd']}, x{regsw['rs1']}, x{regsw['rs2']}"
@@ -30,7 +30,7 @@ def translate_registers(line, operands_list):
 def process_instruction(line, instruction_patterns):
     parts = line.split(maxsplit=1)
     if len(parts) > 1:
-        print(line)
+        # print(line)
         instruction_name = parts[0]
         operands = parts[1]
         operands_list = parse_operands(operands)
@@ -63,8 +63,9 @@ def match_operands(instruction_name, operands_list, instruction_patterns):
         for pattern in patterns:
             if len(pattern) == len(operands_list):
                 return {pattern[i]: operands_list[i] for i in range(len(pattern))}
-    err ="ERROR: No encoding found : " + instruction_name
-    print(err)
+    err ="ERROR: No encoding found : " + instruction_name 
+    # print(instruction_name in instruction_patterns)
+    # print(err, operands_list)
     return err 
 
 def process_code_block(block, instruction_patterns, output_file):
@@ -72,10 +73,13 @@ def process_code_block(block, instruction_patterns, output_file):
     processed_block = ""
     # gen_inst = ""
     pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
-
+    
+    consequent = 0
+    print("\n block")
     for line in block:
         
         if bool(pattern.search(line)):
+            consequent = consequent + 1
             new_inst = process_instruction(line, instruction_patterns)
             if new_inst != gen_inst:
                 processed_block = processed_block + new_inst + '\n'
@@ -83,9 +87,13 @@ def process_code_block(block, instruction_patterns, output_file):
             
             processed_block = processed_block + '\n'
         else:
+            if consequent != 0:
+                print(consequent)
+            consequent = 0
             gen_inst = ""
             processed_block = processed_block + line + '\n'
-       
+    
+    print("-----")
     
     output_file.write(processed_block)
     
