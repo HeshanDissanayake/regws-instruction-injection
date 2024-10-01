@@ -6,6 +6,8 @@ def load_instruction_patterns(filename):
     with open(filename, 'r') as file:
         return json.load(file)
 
+
+
 def gen_regsw(matched_operands):
     regsw = {'rs1':0, 'rs2':0, 'rd':0}
     for operand in regsw.keys():
@@ -38,13 +40,13 @@ def process_instruction(line, instruction_patterns):
         matched_operands = match_operands(instruction_name, operands_list, instruction_patterns)
         new_inst = gen_regsw(matched_operands)
 
-        return new_inst + "\n" + translated_line
+        return new_inst, translated_line
         
         # print(f"{line} Instruction: {instruction_name}, Operands: {matched_operands}")
     else:
         # Handle cases where the line does not have an instruction and operands
         print(f"{line} Instruction: {line.strip()}, Operands: None")
-        return ""
+        return "",""
 
 def parse_operands(operands):
     operand_list = []
@@ -68,35 +70,85 @@ def match_operands(instruction_name, operands_list, instruction_patterns):
     # print(err, operands_list)
     return err 
 
+
 def process_code_block(block, instruction_patterns, output_file):
-    
+
+    regsw = ""
     processed_block = ""
-    # gen_inst = ""
     pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
     
-    consequent = 0
-    print("\n block")
     for line in block:
         
         if bool(pattern.search(line)):
-            consequent = consequent + 1
-            new_inst = process_instruction(line, instruction_patterns)
-            if new_inst != gen_inst:
-                processed_block = processed_block + new_inst + '\n'
-            # gen_inst = new_inst
+            reg_inst, transtaled_inst = process_instruction(line, instruction_patterns)
+            processed_block = processed_block + reg_inst + '\n' + transtaled_inst + '\n\n'
             
-            processed_block = processed_block + '\n'
         else:
-            if consequent != 0:
-                print(consequent)
-            consequent = 0
             gen_inst = ""
             processed_block = processed_block + line + '\n'
-    
-    print("-----")
-    
+
     output_file.write(processed_block)
+
+def compress_regsw(regsw_list):
+
     
+    regsw_c = ""
+
+    for regsw in regsw_list:
+        banks = ''
+        if regsw != "norm":
+            banks = regsw.split(" ")[-3:]
+            banks = ''.join(str(int(item[1])) for item in banks)
+        else:
+            banks = "000"
+        regsw_c = regsw_c + banks + ' '
+
+    print(regsw_c)
+
+
+    return "regsw_c " + regsw_c
+
+def process_code_block_opt(block, instruction_patterns, output_file):
+
+    regsw_idx = 0
+    regsw = []
+    processed_block = []
+    pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
+    
+    Q = 7
+    regsw_quota = Q
+
+    for idx, line in enumerate(block):
+        
+        if bool(pattern.search(line)):
+
+            if regsw_quota == Q:
+                regsw_idx = idx
+
+            regsw_quota = regsw_quota - 1
+
+            reg_inst, translated_inst = process_instruction(line, instruction_patterns)
+            processed_block.append(translated_inst)
+            regsw.append(reg_inst)
+        else:
+            processed_block.append(line)
+
+            if regsw_quota !=Q:
+                regsw_quota = regsw_quota - 1
+                regsw.append("norm")
+        if regsw_quota == 0:
+            regsw_quota = Q
+            regsw_c = compress_regsw(regsw)
+            processed_block.insert(regsw_idx, regsw_c)
+            regsw = []
+
+    out_block = ""
+    # print(processed_block)
+    for line in processed_block:
+        out_block = out_block + line + '\n'
+
+    output_file.write(out_block)
+
 
 def read_file(filename, instruction_patterns, output_file):
     with open(filename, 'r') as file:
@@ -111,15 +163,15 @@ def read_file(filename, instruction_patterns, output_file):
         # Check for the start of a block
         if stripped_line.startswith(".LBB"):
             if current_block:
-                process_code_block(current_block, instruction_patterns, output_file)
+                process_code_block_opt(current_block, instruction_patterns, output_file)
                 current_block = []
             current_block.append(line.rstrip())
         
         else:
             current_block.append(line.rstrip())
     
-
-    process_code_block(current_block, instruction_patterns, output_file)
+    # for the last code block
+    process_code_block_opt(current_block, instruction_patterns, output_file)
 
     # if current_block:
     #     code_blocks.append('\n'.join(current_block))
@@ -144,3 +196,5 @@ if __name__ == "__main__":
         read_file(filename, instruction_patterns, output_file)
 
         output_file.close()
+
+        # print("without:", without_opt,"  opt:",opt)
