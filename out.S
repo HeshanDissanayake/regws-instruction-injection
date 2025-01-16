@@ -1,46 +1,32 @@
-.LBB3_4:                                   # @main
-# %bb.0:
-	addi	sp, sp, -288
-	sd	ra, 280(sp)                     # 8-byte Folded Spill
-regsw_c 001 000 001 001 000 000 000 
-	sd	x1, 272(sp)
-	sd	a1, 272(sp)                     # 8-byte Folded Spill
-	sd	x2, 264(sp)                     # 8-byte Folded Spill
-	sd	x3, 256(sp)                     # 8-byte Folded Spill
-	lui	a1, %hi(.L__const.main.arr)
-	addi	a1, a1, %lo(.L__const.main.arr)
-	mv	a0, sp
-	li	a2, 256
-	call	memcpy
-	lui	a0, %hi(.Lstr)
-	addi	a0, a0, %lo(.Lstr)
-regsw_c 100 110 000 010 000 100 100 
-	call	puts
-	lui	x1, %hi(.L.str)
-	addi	x1, x1, %lo(.L.str)
-	li	a1, 64
-	mv	a0, x1
-	call	printf
-	addi	x3, sp, 4
-	addi	x2, sp, 256
-.LBB4_1:                                # =>This Inner Loop Header: Depth=1
-regsw_c 010 010 000 110 011 000 000 
-	lw	a1, 0(x3)
-	mv	a0, x1
-	call	printf
-	addi	x3, x3, 4
-	bne	x3, x2, .LBB4_1
-# %bb.2:
-	li	a0, 10
-	call	putchar
-	mv	a0, sp
-regsw_c 100 000 000 000 000 000 100 
-	li	a2, 63
-	mv	x3, sp
-	li	a1, 0
-	call	quickSort
-	lui	a0, %hi(.Lstr.4)
-	addi	a0, a0, %lo(.Lstr.4)
-	call	puts
-	lui	x1, %hi(.L.str)
-	addi	x1, x1, %lo(.L.str)
+.LBB4_20:                               #   in Loop: Header=BB4_14 Depth=1
+	regsw_c	x0, 0x0(x16)		# 100000000000000000000
+	ld	x1, 8(t4)
+	sub	a2, a1, s5
+
+
+
+
+.LBB4_21:                               #   in Loop: Header=BB4_14 Depth=1
+	regsw_c	x9, 0x4(x17)		# 100010100100000000100
+	ld	x1, 8(t4)
+	slli	t5, x1, 24
+	srli	x9, t5, 56
+	addi	x10, a1, -1
+	li	t5, -1
+	bge	a2, a1, .LBB4_62
+	li	x2, 0
+	regsw_c	x1, 0x124(x10)		# 010100000100100100100
+	slli	t5, x1, 8
+	srli	x3, t5, 56
+	li	t5, -1
+
+	mv	x4, t0
+	mv	x5, a7
+	mv	x6, a6
+	mv	x7, a5
+	regsw_c	x0, 0x0(x16)		# 100000000000000000000
+	mv	x7, a5
+	j	.LBB4_25
+.LBB4_23:                               #   in Loop: Header=BB4_25 Depth=2
+	regsw_c	x0, 0x0(x8)		# 010000000000000000000
+	mv	t6, x9

@@ -109,6 +109,7 @@
     "sgtz": [["rd", "rs2"]],
     
     "flt.s": [["rd", "frs1", "frs2"]],
+    "flt.d": [["rd", "frs1", "frs2"]],
     "fmv.s": [[]],
     "fabs.s": [[]],
     "fneg.s": [[]],

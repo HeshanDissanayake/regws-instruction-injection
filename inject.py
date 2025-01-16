@@ -9,6 +9,7 @@ def load_instruction_patterns(filename):
 
 
 def gen_regsw(matched_operands):
+    # print(matched_operands)
     regsw = {'rs1':0, 'rs2':0, 'rd':0}
     for operand in regsw.keys():
         if operand in matched_operands.keys():
@@ -53,7 +54,10 @@ def parse_operands(operands):
     for operand in operands.split(','):
         operand = operand.strip()
         if '(' in operand and ')' in operand:
-            imm, reg = re.match(r'([^()]+)\(([^()]+)\)', operand).groups()
+            imm, reg = re.match(r'([^()]+(?:\([^()]+\))?)\(([^()]+)\)', operand).groups()
+
+            # imm, reg = re.match(r'([^()]+)\(([^()]+)\)', operand).groups()
+            # print(operand, "--- ",imm, reg)
             operand_list.extend([imm.strip(), reg.strip()])
         else:
             operand_list.append(operand)
@@ -79,6 +83,7 @@ def process_code_block(block, instruction_patterns, output_file):
     
     for line in block:
         
+       
         if bool(pattern.search(line)):
             reg_inst, transtaled_inst = process_instruction(line, instruction_patterns)
             processed_block = processed_block + reg_inst + '\n' + transtaled_inst + '\n\n'
@@ -90,7 +95,7 @@ def process_code_block(block, instruction_patterns, output_file):
     output_file.write(processed_block)
 
 def compress_regsw(regsw_list):
-
+    # compression done in order of rs1,rs2,imm
     
     regsw_c = ""
 
@@ -101,12 +106,18 @@ def compress_regsw(regsw_list):
             banks = ''.join(str(int(item[1])) for item in banks)
         else:
             banks = "000"
-        regsw_c = regsw_c + banks + ' '
+        regsw_c = regsw_c + banks
 
-    print(regsw_c)
+    dumy_bits = 7 - len(regsw_list)
+    regsw_c = regsw_c + '0'*dumy_bits*3
+    
+    rs1 = int(regsw_c[:5], 2)
+    rs2 = int(regsw_c[5:10], 2)
+    imm = hex(int(regsw_c[10:], 2))
 
-
-    return "regsw_c " + regsw_c
+   
+    regsw_c_inst = f"\tregsw_c\tx{rs2}, {imm}(x{rs1})" 
+    return f"{regsw_c_inst}\t\t# {regsw_c}"
 
 def process_code_block_opt(block, instruction_patterns, output_file):
 
@@ -117,11 +128,11 @@ def process_code_block_opt(block, instruction_patterns, output_file):
     
     Q = 7
     regsw_quota = Q
+    regsw_count = 0
 
     for idx, line in enumerate(block):
         
         if bool(pattern.search(line)):
-
             if regsw_quota == Q:
                 regsw_idx = idx
 
@@ -134,14 +145,21 @@ def process_code_block_opt(block, instruction_patterns, output_file):
             processed_block.append(line)
 
             if regsw_quota !=Q:
-                regsw_quota = regsw_quota - 1
-                regsw.append("norm")
+                if not (line.lstrip().startswith("#") or line == ''):
+                    regsw_quota = regsw_quota - 1
+                    regsw.append("norm")
+
         if regsw_quota == 0:
             regsw_quota = Q
             regsw_c = compress_regsw(regsw)
-            processed_block.insert(regsw_idx, regsw_c)
+            processed_block.insert(regsw_idx+regsw_count, regsw_c)
             regsw = []
+            regsw_count = regsw_count + 1
 
+    if regsw != []:
+        regsw_c = compress_regsw(regsw)
+        processed_block.insert(regsw_idx+regsw_count, regsw_c)
+    
     out_block = ""
     # print(processed_block)
     for line in processed_block:
