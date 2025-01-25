@@ -21,7 +21,7 @@ def gen_regsw(matched_operands):
     return f"\tregsw  x{regsw['rd']}, x{regsw['rs1']}, x{regsw['rs2']}"
 
 def translate_registers(line, operands_list):
-    pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
+    pattern = re.compile(r'\bn(0|[1-9]|[1-9][0-9]|100)\b')
     new_line = line
     for op in operands_list:
         if bool(pattern.search(op)): 
@@ -33,7 +33,7 @@ def translate_registers(line, operands_list):
 def process_instruction(line, instruction_patterns):
     parts = line.split(maxsplit=1)
     if len(parts) > 1:
-        # print(line)
+        
         instruction_name = parts[0]
         operands = parts[1]
         operands_list = parse_operands(operands)
@@ -53,6 +53,9 @@ def parse_operands(operands):
     operand_list = []
     for operand in operands.split(','):
         operand = operand.strip()
+        if '#' in operand:
+            operand = operand.split('#')[0].strip()
+        
         if '(' in operand and ')' in operand:
             imm, reg = re.match(r'([^()]+(?:\([^()]+\))?)\(([^()]+)\)', operand).groups()
 
@@ -61,6 +64,7 @@ def parse_operands(operands):
             operand_list.extend([imm.strip(), reg.strip()])
         else:
             operand_list.append(operand)
+
     return operand_list
 
 def match_operands(instruction_name, operands_list, instruction_patterns):
@@ -79,11 +83,10 @@ def process_code_block(block, instruction_patterns, output_file):
 
     regsw = ""
     processed_block = ""
-    pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
+    pattern = re.compile(r'\bn(0|[1-9]|[1-9][0-9]|100)\b')
     
     for line in block:
-        
-       
+        print(line)
         if bool(pattern.search(line)):
             reg_inst, transtaled_inst = process_instruction(line, instruction_patterns)
             processed_block = processed_block + reg_inst + '\n' + transtaled_inst + '\n\n'
@@ -124,13 +127,14 @@ def process_code_block_opt(block, instruction_patterns, output_file):
     regsw_idx = 0
     regsw = []
     processed_block = []
-    pattern = re.compile(r'\bn([1-9]|[1-9][0-9]|100)\b')
+    pattern = re.compile(r'\b(?:n0|n[1-9]|n[1-9][0-9]|100)\b')
     
     Q = 7
     regsw_quota = Q
     regsw_count = 0
 
     for idx, line in enumerate(block):
+        
         
         if bool(pattern.search(line)):
             if regsw_quota == Q:
