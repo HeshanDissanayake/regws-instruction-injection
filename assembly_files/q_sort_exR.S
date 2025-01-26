@@ -7,6 +7,11 @@
 	
 .LBB4_21:                               #   in Loop: Header=BB4_14 Depth=1
 	ld	n1, 8(t4)
+	regws x0, x1, x0
+	regws x0, x1, x1
+	regws x1, x1, x0
+	regws x0, x1, x0
+	regws x1, x1, x1
 	slli	t5, n1, 24
 	srli	n9, t5, 56
 	addi	n10, a1, -1
