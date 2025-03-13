@@ -183,7 +183,7 @@ def read_file(filename, instruction_patterns, output_file):
         stripped_line = line.strip()
 
         # Check for the start of a block
-        if stripped_line.startswith(".LBB"):
+        if stripped_line.startswith(".LBB") or stripped_line.startswith('# %bb'):
             if current_block:
                 process_code_block_opt(current_block, instruction_patterns, output_file)
                 current_block = []
