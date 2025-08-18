@@ -9,7 +9,7 @@ def load_instruction_patterns(filename):
 
 
 def gen_regsw(matched_operands):
-    # print(matched_operands)
+    print(matched_operands)
     regsw = {'rs1':0, 'rs2':0, 'rd':0}
     for operand in regsw.keys():
         if operand in matched_operands.keys():
@@ -113,11 +113,9 @@ def compress_regsw(regsw_list):
 
     dumy_bits = 7 - len(regsw_list)
     regsw_c = regsw_c + '0'*dumy_bits*3
-    
     rs1 = int(regsw_c[:5], 2)
     rs2 = int(regsw_c[5:10], 2)
     imm = hex(int(regsw_c[10:], 2))
-
    
     regsw_c_inst = f"\tregsw_c\tx{rs2}, {imm}(x{rs1})" 
     return f"{regsw_c_inst}\t\t# {regsw_c}"
@@ -127,19 +125,17 @@ def process_code_block_opt(block, instruction_patterns, output_file):
     regsw_idx = 0
     regsw = []
     processed_block = []
-    pattern = re.compile(r'\b(?:n0|n[1-9]|n[1-9][0-9]|100)\b')
+    pattern = re.compile(r'\b(?:n0|n[1-9]|n[1-9][0-9]|n100)\b')
     
     Q = 7
     regsw_quota = Q
     regsw_count = 0
 
     for idx, line in enumerate(block):
-        
-        
         if bool(pattern.search(line)):
             if regsw_quota == Q:
                 regsw_idx = idx
-
+            print("Processing line:", line, bool(pattern.search(line)))
             regsw_quota = regsw_quota - 1
 
             reg_inst, translated_inst = process_instruction(line, instruction_patterns)
